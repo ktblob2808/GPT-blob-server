@@ -13,6 +13,9 @@ require("./dao/dbConnect");
 // Import custom error classes
 const { NotFoundError, UnknownError } = require('./utils/ServiceError');
 
+// Import admin route
+var adminRouter = require('./routes/admin');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -26,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
