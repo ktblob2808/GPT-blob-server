@@ -8,13 +8,14 @@ var logger = require('morgan');
 require("dotenv").config(); 
 
 // Import database connection
-require("./dao/dbConnect");
+require("./dao/db");
 
 // Import custom error classes
 const { NotFoundError, UnknownError } = require('./utils/ServiceError');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// Import admin route
+var adminRouter = require('./routes/admin');
+
 
 var app = express();
 
@@ -24,12 +25,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/admin', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(new NotFoundError());
+  next(createError(404));
 });
 
 // error handler
@@ -40,7 +40,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json(err instanceof ServiceError ? err.toResponse() : new UnknownError().toResponse());
+  res.render('error');
 });
 
 module.exports = app;
