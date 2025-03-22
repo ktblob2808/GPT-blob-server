@@ -6,9 +6,13 @@ const jwt = require('jsonwebtoken');
 const md5 = require("md5");
 const { updateAdminDao, loginDao } = require('../dao/adminDao');
 const { ValidationError } = require('../utils/ServiceError');
+const { validateCaptcha } = require('../services/captchaService');
 
 router.post('/login', async (req, res, next) => {
     try {
+        const { captcha } = req.body;
+        validateCaptcha(captcha, req.session.captcha);
+
         const { token, data } = await loginService(req.body);
         if(token){
             res.setHeader('authentication', token);
