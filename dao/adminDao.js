@@ -9,6 +9,14 @@ const loginDao = async (loginInfo) => {
     })
 };
 
+const updateAdminDao = async function(newAccountInfo){
+    return await adminModel.update(newAccountInfo, {
+        where : {
+            loginId : newAccountInfo.loginId
+        }
+    })
+}
 module.exports = {
-    loginDao
+    loginDao,
+    updateAdminDao
 };
