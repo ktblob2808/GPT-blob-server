@@ -1,3 +1,5 @@
+const { formatResponse } = require("./tool")
+
 class ServiceError extends Error {
     constructor(message, code) {
         super(message);
@@ -5,12 +7,7 @@ class ServiceError extends Error {
     }
 
     toResponse() {
-        return {
-            error: {
-                message: this.message,
-                code: this.code
-            }
-        };
+        return formatResponse(this.code, this.message, null);
     }
 }
 

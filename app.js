@@ -3,7 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var jwt = require('jsonwebtoken');
+var expressJWT = require("express-jwt");
+const md5 = require('md5');
+const { NotFoundError, ForbiddenError, UnknownError } = require('./utils/ServiceError');
+
 
 // Load environment variables from .env file in the project root directory
 require("dotenv").config(); 
@@ -12,7 +15,6 @@ require("dotenv").config();
 require("./dao/db");
 
 // Import custom error classes
-const { NotFoundError, ForbiddenError, UnknownError } = require('./utils/ServiceError');
 
 // Import admin route
 var adminRouter = require('./routes/admin');
@@ -26,24 +28,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to verify JWT token
-app.use((req, res, next) => {
-    if (req.path === '/api/admin/login') {
-        return next();
-    }
-
-    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    if (!token) {
-        return next(new ForbiddenError('No token provided'));
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            return next(new ForbiddenError('Failed to authenticate token'));
-        }
-        req.user = decoded;
-        next();
-    });
-});
+app.use(expressJWT({
+  secret : md5(process.env.JWT_SECRET), 
+  algorithms : ['HS256'], 
+}).unless({
+  path : [
+    {"url" : "/api/admin/login", methods : ["POST"]}
+  ]
+}))
 
 app.use('/api/admin', adminRouter);
 
@@ -60,7 +52,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json(err instanceof ServiceError ? err.toResponse() : new UnknownError().toResponse());
+  res.send(new ForbiddenError("login fail").toResponse());
 });
 
 module.exports = app;
