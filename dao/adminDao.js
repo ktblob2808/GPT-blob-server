@@ -1,9 +1,14 @@
-const Admin = require('../models/adminModel');
+const adminModel = require('./models/adminModel');
 
-const findAdminByLoginId = async (loginId) => {
-    return await Admin.findOne({ where: { loginId } });
+const loginDao = async (loginInfo) => {
+    return await adminModel.findOne({
+        where : {
+            loginId : loginInfo.loginId,
+            loginPwd : loginInfo.loginPwd
+        }
+    })
 };
 
 module.exports = {
-    findAdminByLoginId
+    loginDao
 };

@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../dao/dbConnect');
+const sequelize = require('../../dao/dbConnect');
 
-const Admin = sequelize.define('Admin', {
+const Admin = sequelize.define('admin', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -22,6 +22,7 @@ const Admin = sequelize.define('Admin', {
     }
 }, {
     tableName: 'admin',
+    freezeTableName : true,
     timestamps: false
 });
 
