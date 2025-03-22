@@ -1,6 +1,8 @@
+const { ValidationError } = require('../utils/errors');
+
 const validateCaptcha = (inputCaptcha, sessionCaptcha) => {
     if (inputCaptcha !== sessionCaptcha) {
-        throw new Error('Invalid captcha');
+        throw new ValidationError('Invalid captcha');
     }
 };
 
