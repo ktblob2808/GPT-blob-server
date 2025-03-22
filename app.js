@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressJWT = require("express-jwt");
 const md5 = require('md5');
-const { NotFoundError, ForbiddenError, UnknownError } = require('./utils/ServiceError');
+const { ForbiddenError, ServiceError, UnknownError } = require('./utils/ServiceError');
 
 
 // Load environment variables from .env file in the project root directory
@@ -33,7 +33,8 @@ app.use(expressJWT({
   algorithms : ['HS256'], 
 }).unless({
   path : [
-    {"url" : "/api/admin/login", methods : ["POST"]}
+    {"url" : "/api/admin/login", methods : ["POST"]},
+    {"url" : "/api/admin", methods : ["PUT"]}
   ]
 }))
 
@@ -46,13 +47,15 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.send(new ForbiddenError("login fail").toResponse());
+  console.log("err.name>>>",err.name);
+  console.log("err.message>>>",err.message);
+  if (err.name === 'UnauthorizedError') {
+    res.send(new ForbiddenError("login fail, Or login expired").toResponse());
+  } else if(err instanceof ServiceError){
+    res.send(err.toResponse());
+  } else {
+    res.send(new UnknownError().toResponse());
+  }
 });
 
 module.exports = app;

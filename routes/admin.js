@@ -4,14 +4,16 @@ const { loginService } = require('../service/adminService');
 const { formatResponse } = require('../utils/tool');
 const jwt = require('jsonwebtoken');
 const md5 = require("md5");
-const adminDao = require('../dao/adminDao');
+const { updateAdminDao, loginDao } = require('../dao/adminDao');
 const { ValidationError } = require('../utils/ServiceError');
 
 router.post('/login', async (req, res, next) => {
     try {
         const { token, data } = await loginService(req.body);
-        res.setHeader('authentication', token);
-        res.json(formatResponse(0, 'Login successful', data));
+        if(token){
+            res.setHeader('authentication', token);
+        }
+        res.json(formatResponse(0, '', data));
     } catch (error) {
         console.log(error);
         res.json(formatResponse(1, error.message));
@@ -32,30 +34,32 @@ router.get('/whoami', async (req, res, next) => {
     }
 });
 
-router.post('/change-password', async (req, res, next) => {
+router.put('/', async (req, res, next) => {
     try {
-        const { loginId, oldPassword, newPassword } = req.body;
-        const admin = await adminDao.findAdminByLoginId(loginId);
+        const admin = await loginDao({
+            loginId: req.body.loginId,
+            loginPwd: md5(req.body.oldLoginPwd)
+        })
+        if (admin && admin.dataValues) {
+            
+            const newPassword = md5(req.body.loginPwd);
+            await updateAdminDao({
+                name: req.body.name,
+                loginId: req.body.loginId,
+                loginPwd: newPassword
+            })
+            
 
-        if (!admin || admin.loginPwd !== md5(oldPassword)) {
-            throw new ValidationError('Invalid old password');
+
+            res.json(formatResponse(0, '', {
+                id: admin.id,
+                loginId: req.body.loginId,
+                name: req.body.name
+            }));
+        } else {
+            throw new ValidationError("Old password is incorrect");
         }
 
-        admin.loginPwd = md5(newPassword);
-        await admin.save();
-
-        const token = jwt.sign(
-            { id: admin.id, loginId: admin.loginId, name: admin.name },
-            process.env.JWT_SECRET,
-            { expiresIn: '1d' }
-        );
-
-        res.setHeader('authentication', token);
-        res.json(formatResponse(0, 'Password changed successfully', {
-            id: admin.id,
-            loginId: admin.loginId,
-            name: admin.name
-        }));
     } catch (error) {
         next(error);
     }
