@@ -1,4 +1,4 @@
-const { ValidationError } = require('../utils/errors');
+const { ValidationError } = require('../utils/ServiceError');
 
 const validateCaptcha = (inputCaptcha, sessionCaptcha) => {
     if (inputCaptcha !== sessionCaptcha) {

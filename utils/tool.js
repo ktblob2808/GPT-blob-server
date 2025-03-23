@@ -6,6 +6,15 @@ const formatResponse = (code, msg, data = null) => {
     };
 };
 
+const handleDataPattern = function(data){
+    const arr = [];
+    for(const i of data){
+        arr.push(i.dataValues);
+    }
+    return arr;
+}
+
 module.exports = {
-    formatResponse
+    formatResponse,
+    handleDataPattern
 };

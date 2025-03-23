@@ -19,6 +19,7 @@ require("./dao/db");
 // Import routes
 var adminRouter = require('./routes/admin');
 var captchaRouter = require('./routes/captcha');
+var bannerRouter = require('./routes/bannerRoute');
 
 var app = express();
 
@@ -50,6 +51,7 @@ app.use(expressJWT({
 
 app.use('/api/admin', adminRouter);
 app.use('/res', captchaRouter);
+app.use('/api', bannerRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
