@@ -22,6 +22,7 @@ var captchaRouter = require('./routes/captcha');
 var bannerRouter = require('./routes/bannerRoute');
 var uploadRouter = require('./routes/uploadRoute');
 var blogTypeRouter = require('./routes/blogType');
+var blogRouter = require('./routes/blog'); // Add blog route
 
 var app = express();
 
@@ -56,6 +57,7 @@ app.use('/res', captchaRouter);
 app.use('/api', bannerRouter);
 app.use('/api', uploadRouter);
 app.use('/api', blogTypeRouter);
+app.use('/api', blogRouter); // Use blog route
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

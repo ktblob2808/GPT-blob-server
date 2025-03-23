@@ -3,6 +3,8 @@ const adminModel = require('./models/adminModel');
 const bannerModel = require("./models/bannerModel");
 const md5 = require('md5');
 const blogTypeModel = require('./models/blogTypeModel');
+const blogModel = require('./models/blogModel');
+
 
 sequelize.sync({ alter: true }).then(async () => {
     console.log('Database & tables created!');
@@ -46,7 +48,7 @@ sequelize.sync({ alter: true }).then(async () => {
 
         console.log("init banner data finished...");
     }
-     // Create initial data for the banner table
+     // Create initial data for the blogType table
      const blogTypeCount = await blogTypeModel.count();
      if (!blogTypeCount) {
  

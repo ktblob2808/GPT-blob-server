@@ -10,7 +10,6 @@ const Admin = sequelize.define('admin', {
     loginId: {
         type: DataTypes.STRING(45),
         allowNull: false,
-        unique: true
     },
     name: {
         type: DataTypes.STRING(255),
