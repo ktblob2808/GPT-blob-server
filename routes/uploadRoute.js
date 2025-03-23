@@ -8,7 +8,7 @@ const { UploadError } = require("../utils/ServiceError");
 
 router.post('/upload',  async function (req, res, next) {
 
-    upload.single('file')(req, res, err=>{
+    upload.single('file')(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             next(new UploadError("Failed to upload the file. Please check the file size and make sure it is within 2MB."));
         } else {
