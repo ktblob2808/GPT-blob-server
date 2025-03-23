@@ -1,3 +1,6 @@
+const sequelize = require('./database');
+const Banner = require('../model/bannerModel');
+
 module.exports = {
   development: {
     username: process.env.DB_USER || 'root',
@@ -21,3 +24,23 @@ module.exports = {
     dialect: 'mysql'
   }
 };
+
+const initialData = async () => {
+  await Banner.sync({ force: true });
+  await Banner.bulkCreate([
+    {
+      midImg: 'midImg1.jpg',
+      bigImg: 'bigImg1.jpg',
+      title: 'Banner 1',
+      description: 'Description 1'
+    },
+    {
+      midImg: 'midImg2.jpg',
+      bigImg: 'bigImg2.jpg',
+      title: 'Banner 2',
+      description: 'Description 2'
+    }
+  ]);
+};
+
+initialData();
