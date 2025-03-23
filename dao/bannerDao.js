@@ -1,4 +1,4 @@
-const Banner = require('../model/bannerModel');
+const Banner = require('./models/bannerModel');
 
 const getAllBanners = async () => {
   return await Banner.findAll();
@@ -6,7 +6,8 @@ const getAllBanners = async () => {
 
 const updateBanners = async (banners) => {
   await Banner.destroy({ where: {} });
-  return await Banner.bulkCreate(banners);
+  await Banner.bulkCreate(banners);
+  return await Banner.findAll();
 };
 
 module.exports = {

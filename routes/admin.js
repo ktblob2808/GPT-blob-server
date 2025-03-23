@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { loginService } = require('../service/adminService');
+const { loginService } = require('../services/adminService');
 const { formatResponse } = require('../utils/tool');
 const jwt = require('jsonwebtoken');
 const md5 = require("md5");
@@ -11,7 +11,7 @@ const { validateCaptcha } = require('../services/captchaService');
 router.post('/login', async (req, res, next) => {
     try {
         const { captcha } = req.body;
-        validateCaptcha(captcha, req.session.captcha);
+       // validateCaptcha(captcha, req.session.captcha);
 
         const { token, data } = await loginService(req.body);
         if(token){
