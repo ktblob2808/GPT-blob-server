@@ -20,7 +20,43 @@ const getAllBlogs = async (page, limit, categoryId) => {
   return { rows, count };
 };
 
+// Find blog by ID
+async function findById(id) {
+  return await Blog.findByPk(id, {
+    include : [
+        {
+            model : BlogType,
+            as : "category"
+        }
+    ]
+})
+}
+
+// Update blog by ID
+async function updateById(id, blogData) {
+  await Blog.update(blogData, {
+      where : {
+          id
+      }
+  });
+  return await Blog.findByPk(id);
+  
+}
+
+// Delete blog by ID
+async function deleteById(id) {
+  return await Blog.destroy({
+    where : {
+        id
+    }
+})
+}
+
+
 module.exports = {
   addBlog,
-  getAllBlogs
+  getAllBlogs,
+  findById,
+  updateById,
+  deleteById
 };

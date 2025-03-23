@@ -2,7 +2,7 @@ const { validate } = require('validate.js');
 const blogDao = require('../dao/blogDao');
 const blogTypeDao = require('../dao/blogTypeDao');
 const blogTypeModel = require("../dao/models/blogTypeModel");
-const { ValidationError } = require("../utils/ServiceError");
+const { ValidationError, ServiceError } = require("../utils/ServiceError");
 
 
 validate.validators.categoryIdIsExist = async function(value){
@@ -77,7 +77,45 @@ const getAllBlogs = async (page, limit, categoryId) => {
   return await blogDao.getAllBlogs(page, limit, categoryId);
 };
 
+// Get single blog
+async function getBlogById(id, auth) {
+  const blog = await blogDao.findById(id);
+  if (!blog) {
+    throw new ServiceError('Blog not found');
+  }
+  if (!auth) {
+    blog.scanNumber++;
+    await blog.save();
+  }
+  //const blogType = await blogTypeDao.findById(blog.blogTypeId);
+  return blog 
+}
+
+// Edit blog
+async function editBlogById(id, blogData) {
+    blogData.toc = JSON.stringify('[]');
+    const updatedBlog = await blogDao.updateById(id, blogData);
+    if (!updatedBlog) {
+        throw new ServiceError('Blog not found or update failed');
+    }
+    return updatedBlog;
+}
+
+// Delete blog
+async function deleteBlogById(id) {
+  const blog = await blogDao.findById(id);
+  if (!blog) {
+    throw new ServiceError('Blog not found');
+  }
+  await blogDao.deleteById(id);
+  await blogTypeDao.decrementArticleCount(blog.blogTypeId);
+  return true;
+}
+
 module.exports = {
   addBlog,
-  getAllBlogs
+  getAllBlogs,
+  getBlogById,
+  editBlogById,
+  deleteBlogById
 };

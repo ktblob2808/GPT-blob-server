@@ -23,10 +23,16 @@ const deleteBlogTypeById = async (id) => {
   return blogType.articleCount;
 };
 
+// Decrement article count
+const decrementArticleCount = async (id) => {
+  return await BlogType.findByPk(id, { $inc: { articleCount: -1 } });
+};
+
 module.exports = {
   addBlogType,
   getBlogTypeById,
   getAllBlogTypes,
   updateBlogTypeById,
-  deleteBlogTypeById
+  deleteBlogTypeById,
+  decrementArticleCount
 };

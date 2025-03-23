@@ -48,7 +48,12 @@ app.use(expressJWT({
   path : [
     {"url" : "/api/admin/login", methods : ["POST"]},
     {"url" : "/api/admin", methods : ["PUT"]},
-    {"url" : "/res/captcha", methods : ["GET"]}
+    {"url" : "/res/captcha", methods : ["GET"]},
+    {"url" : "/api/banner", methods : ["GET"]},
+    {"url" : "/api/blogtype", methods : ["GET"]},
+    {"url" : "/api/blog", methods : ["GET"]},
+    {"url" : /\/api\/blog\/\d/, methods : ["GET"]}// Exclude from token checking
+
   ]
 }))
 
