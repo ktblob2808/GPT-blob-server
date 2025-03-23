@@ -3,7 +3,8 @@ const adminModel = require('./models/adminModel');
 const bannerModel = require("./models/bannerModel");
 const md5 = require('md5');
 const blogTypeModel = require('./models/blogTypeModel');
-const Blog = require('./models/blogModel');
+const blogModel = require('./models/blogModel');
+
 
 sequelize.sync({ alter: true }).then(async () => {
     console.log('Database & tables created!');
@@ -61,15 +62,3 @@ sequelize.sync({ alter: true }).then(async () => {
      }
 
 });
-
-const initialData = async () => {
-  await blogTypeModel.sync({ force: true });
-  await Blog.sync({ force: true });
-  await blogTypeModel.bulkCreate([
-    { name: 'Technology', articleCount: 0, order: 1 },
-    { name: 'Lifestyle', articleCount: 0, order: 2 },
-    { name: 'Travel', articleCount: 0, order: 3 }
-  ]);
-};
-
-initialData();

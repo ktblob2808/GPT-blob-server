@@ -12,7 +12,7 @@ const getAllBlogs = async (page, limit, categoryId) => {
   const where = categoryId && categoryId !== -1 ? { categoryId } : {};
   const { rows, count } = await Blog.findAndCountAll({
     where,
-    include: [{ model: BlogType, as: 'category', attributes: ['name'] }],
+    include: [{ model: BlogType, as: 'category', attributes: ['id', 'name'] }],
     limit,
     offset,
     order: [['createDate', 'DESC']]

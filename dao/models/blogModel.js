@@ -1,5 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../../config/database');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../dao/dbConnect');
 const BlogType = require('./blogTypeModel');
 
 const Blog = sequelize.define('Blog', {
@@ -54,7 +54,7 @@ const Blog = sequelize.define('Blog', {
   timestamps: false
 });
 
-Blog.belongsTo(BlogType, { foreignKey: 'categoryId', as: 'category' });
-BlogType.hasMany(Blog, { foreignKey: 'categoryId', as: 'articles' });
+BlogType.hasMany(Blog, {foreignKey : 'categoryId', targetKey : "id"});
+Blog.belongsTo(BlogType,  {foreignKey : 'categoryId', targetKey : "id", as : "category"});
 
 module.exports = Blog;
