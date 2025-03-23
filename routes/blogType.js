@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const blogTypeService = require('../services/blogTypeService');
-const formatResponse = require('../utils/formatResponse');
+const {formatResponse} = require('../utils/tool')
 
 // Add blogType
 router.post('/blogtype', async (req, res) => {
   try {
     const { name, order } = req.body;
     const blogType = await blogTypeService.addBlogType(name, order);
-    res.json(formatResponse(true, blogType));
+    res.json(formatResponse(0, '', blogType));
   } catch (error) {
-    res.status(500).json(formatResponse(false, error.message));
+    res.status(500).json(formatResponse(1, '', error.message));
   }
 });
 
@@ -18,9 +18,9 @@ router.post('/blogtype', async (req, res) => {
 router.get('/blogtype/:id', async (req, res) => {
   try {
     const blogType = await blogTypeService.getBlogTypeById(req.params.id);
-    res.json(formatResponse(true, blogType));
+    res.json(formatResponse(0, '' , blogType));
   } catch (error) {
-    res.status(500).json(formatResponse(false, error.message));
+    res.status(500).json(formatResponse(1, '', error.message));
   }
 });
 
@@ -28,9 +28,9 @@ router.get('/blogtype/:id', async (req, res) => {
 router.get('/blogtypes', async (req, res) => {
   try {
     const blogTypes = await blogTypeService.getAllBlogTypes();
-    res.json(formatResponse(true, blogTypes));
+    res.json(formatResponse(0,"", blogTypes));
   } catch (error) {
-    res.status(500).json(formatResponse(false, error.message));
+    res.status(500).json(formatResponse(1, '', error.message));
   }
 });
 
@@ -38,9 +38,9 @@ router.get('/blogtypes', async (req, res) => {
 router.put('/blogtype/:id', async (req, res) => {
   try {
     const blogType = await blogTypeService.updateBlogTypeById(req.params.id, req.body);
-    res.json(formatResponse(true, blogType));
+    res.json(formatResponse(0, '', blogType));
   } catch (error) {
-    res.status(500).json(formatResponse(false, error.message));
+    res.status(500).json(formatResponse(1, '', error.message));
   }
 });
 
@@ -48,9 +48,9 @@ router.put('/blogtype/:id', async (req, res) => {
 router.delete('/blogtype/:id', async (req, res) => {
   try {
     const articleCount = await blogTypeService.deleteBlogTypeById(req.params.id);
-    res.json(formatResponse(true, { articleCount }));
+    res.json(formatResponse(0, '',  articleCount));
   } catch (error) {
-    res.status(500).json(formatResponse(false, error.message));
+    res.status(500).json(formatResponse(1, '', error.message));
   }
 });
 

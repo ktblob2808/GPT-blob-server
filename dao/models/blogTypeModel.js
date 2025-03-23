@@ -1,5 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../../config/database');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../dao/dbConnect');
 
 const BlogType = sequelize.define('BlogType', {
   id: {
