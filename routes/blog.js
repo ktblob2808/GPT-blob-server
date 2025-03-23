@@ -25,32 +25,32 @@ router.get('/blog', async (req, res) => {
 });
 
 // Get single blog
-router.get('/:id', async (req, res, next) => {
+router.get('/blog/:id', async (req, res, next) => {
   try {
-    const blog = await blogService.getBlogById(req.params.id, req.user);
-    res.json(formatResponse(blog));
+    const blog = await blogService.getBlogById(req.params.id, req.headers.authorization);
+    res.json(formatResponse(0, '',blog));
   } catch (error) {
-    next(error);
+    res.json(formatResponse(1, '',error.message));
   }
 });
 
 // Edit blog
-router.put('/:id', async (req, res, next) => {
+router.put('/blog/:id', async (req, res, next) => {
   try {
     const updatedBlog = await blogService.editBlogById(req.params.id, req.body);
-    res.json(formatResponse(updatedBlog));
+    res.json(formatResponse(0, '', updatedBlog));
   } catch (error) {
-    next(error);
+    res.status(500).json(formatResponse(1, '', error.message));
   }
 });
 
 // Delete blog
-router.delete('/:id', async (req, res, next) => {
+router.delete('/blog/:id', async (req, res, next) => {
   try {
     const result = await blogService.deleteBlogById(req.params.id);
-    res.json(formatResponse(result));
+    res.json(formatResponse(0, "", true));
   } catch (error) {
-    next(error);
+    res.status(500).json(formatResponse(1, '', error.message));
   }
 });
 

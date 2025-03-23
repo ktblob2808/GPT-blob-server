@@ -22,29 +22,41 @@ const getAllBlogs = async (page, limit, categoryId) => {
 
 // Find blog by ID
 async function findById(id) {
-  return await Blog.findById(id).populate('blogTypeId');
+  return await Blog.findByPk(id, {
+    include : [
+        {
+            model : BlogType,
+            as : "category"
+        }
+    ]
+})
 }
 
 // Update blog by ID
 async function updateById(id, blogData) {
-  return await Blog.findByIdAndUpdate(id, blogData, { new: true });
+  await Blog.update(blogData, {
+      where : {
+          id
+      }
+  });
+  return await Blog.findByPk(id);
+  
 }
 
 // Delete blog by ID
 async function deleteById(id) {
-  return await Blog.findByIdAndDelete(id);
+  return await Blog.destroy({
+    where : {
+        id
+    }
+})
 }
 
-// Increment scan number
-async function incrementScanNumber(id) {
-  return await Blog.findByIdAndUpdate(id, { $inc: { scanNumber: 1 } });
-}
 
 module.exports = {
   addBlog,
   getAllBlogs,
   findById,
   updateById,
-  deleteById,
-  incrementScanNumber
+  deleteById
 };

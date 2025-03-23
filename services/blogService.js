@@ -78,25 +78,27 @@ const getAllBlogs = async (page, limit, categoryId) => {
 };
 
 // Get single blog
-async function getBlogById(id, user) {
+async function getBlogById(id, auth) {
   const blog = await blogDao.findById(id);
   if (!blog) {
     throw new ServiceError('Blog not found');
   }
-  if (user && user.role !== 'admin') {
-    await blogDao.incrementScanNumber(id);
+  if (!auth) {
+    blog.scanNumber++;
+    await blog.save();
   }
-  const blogType = await blogTypeDao.findById(blog.blogTypeId);
-  return { ...blog, blogType };
+  //const blogType = await blogTypeDao.findById(blog.blogTypeId);
+  return blog 
 }
 
 // Edit blog
 async function editBlogById(id, blogData) {
-  const updatedBlog = await blogDao.updateById(id, blogData);
-  if (!updatedBlog) {
-    throw new ServiceError('Blog not found or update failed');
-  }
-  return updatedBlog;
+    blogData.toc = JSON.stringify('[]');
+    const updatedBlog = await blogDao.updateById(id, blogData);
+    if (!updatedBlog) {
+        throw new ServiceError('Blog not found or update failed');
+    }
+    return updatedBlog;
 }
 
 // Delete blog
