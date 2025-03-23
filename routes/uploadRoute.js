@@ -1,28 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../tool');
+const { formatResponse } = require("../utils/tool");
+const multer = require("multer");
+const { UploadError } = require("../utils/ServiceError");
 
-class UploadError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'UploadError';
-  }
-}
 
-router.post('/upload', upload.single('file'), (req, res) => {
-  try {
-    if (!req.file) {
-      throw new UploadError('No file uploaded');
-    }
-    const filePath = `/static/uploads/${req.file.filename}`;
-    res.json({ success: true, path: filePath });
-  } catch (error) {
-    if (error instanceof UploadError) {
-      res.status(400).json({ success: false, message: error.message });
-    } else {
-      res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-  }
+router.post('/upload',  async function (req, res, next) {
+
+    upload.single('file')(req, res, err=>{
+        if (err instanceof multer.MulterError) {
+            next(new UploadError("Failed to upload the file. Please check the file size and make sure it is within 2MB."));
+        } else {
+            const filePath = `/static/uploads/${req.file.filename}`;
+            res.json(formatResponse(0, "", filePath));
+        }
+    });
 });
+
+module.exports = router;
 
 module.exports = router;
