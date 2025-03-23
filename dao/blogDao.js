@@ -20,7 +20,31 @@ const getAllBlogs = async (page, limit, categoryId) => {
   return { rows, count };
 };
 
+// Find blog by ID
+async function findById(id) {
+  return await Blog.findById(id).populate('blogTypeId');
+}
+
+// Update blog by ID
+async function updateById(id, blogData) {
+  return await Blog.findByIdAndUpdate(id, blogData, { new: true });
+}
+
+// Delete blog by ID
+async function deleteById(id) {
+  return await Blog.findByIdAndDelete(id);
+}
+
+// Increment scan number
+async function incrementScanNumber(id) {
+  return await Blog.findByIdAndUpdate(id, { $inc: { scanNumber: 1 } });
+}
+
 module.exports = {
   addBlog,
-  getAllBlogs
+  getAllBlogs,
+  findById,
+  updateById,
+  deleteById,
+  incrementScanNumber
 };

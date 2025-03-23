@@ -24,4 +24,34 @@ router.get('/blog', async (req, res) => {
   }
 });
 
+// Get single blog
+router.get('/:id', async (req, res, next) => {
+  try {
+    const blog = await blogService.getBlogById(req.params.id, req.user);
+    res.json(formatResponse(blog));
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Edit blog
+router.put('/:id', async (req, res, next) => {
+  try {
+    const updatedBlog = await blogService.editBlogById(req.params.id, req.body);
+    res.json(formatResponse(updatedBlog));
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Delete blog
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const result = await blogService.deleteBlogById(req.params.id);
+    res.json(formatResponse(result));
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
