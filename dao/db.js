@@ -2,12 +2,10 @@ const sequelize = require('./dbConnect');
 const adminModel = require('./models/adminModel');
 const bannerModel = require("./models/bannerModel");
 const md5 = require('md5');
+const BlogType = require('./models/blogTypeModel');
 
 sequelize.sync({ alter: true }).then(async () => {
     console.log('Database & tables created!');
-
-
-
 
     // Create initial data for the admin table
     const adminCount = await adminModel.count();
@@ -48,7 +46,14 @@ sequelize.sync({ alter: true }).then(async () => {
 
         console.log("init banner data finished...");
     }
-    
 
-  
+    // Create initial data for the blogtype table
+    await BlogType.sync({ force: true });
+    await BlogType.bulkCreate([
+        { name: 'Technology', articleCount: 0, order: 1 },
+        { name: 'Lifestyle', articleCount: 0, order: 2 },
+        { name: 'Travel', articleCount: 0, order: 3 }
+    ]);
+
+    console.log("init blogtype data finished...");
 });
