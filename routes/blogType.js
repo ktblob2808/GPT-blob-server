@@ -25,7 +25,7 @@ router.get('/blogtype/:id', async (req, res) => {
 });
 
 // Get all blogTypes
-router.get('/blogtypes', async (req, res) => {
+router.get('/blogtype', async (req, res) => {
   try {
     const blogTypes = await blogTypeService.getAllBlogTypes();
     res.json(formatResponse(0,"", blogTypes));
