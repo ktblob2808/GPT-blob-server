@@ -1,4 +1,4 @@
-const { JSDOM } = require('jsdom');
+const toc = require('markdown-toc');
 
 const formatResponse = (code, msg, data = null) => {
     return {
@@ -16,42 +16,100 @@ const handleDataPattern = function(data){
     return arr;
 }
 
-// Function to handle Table of Content (toc) and HTML content
-function handleToc(content, isHtml = false) {
-    const toc = [];
-    const headerRegex = /<(h[1-6])>(.*?)<\/\1>/g; // Match headers (h1 to h6)
-    let match;
+const handleToc = function(info){
+    let result = toc(info.markdownContent).json;
 
-    while ((match = headerRegex.exec(content)) !== null) {
-        const [fullMatch, tag, text] = match;
-        const level = parseInt(tag.substring(1)); // Extract header level (1-6)
-        const name = text.trim(); // Extract header text
-        const anchor = name.toLowerCase().replace(/\s+/g, '-'); // Generate anchor by replacing spaces with hyphens
+    function transfer(flatArr){
+        const stack = [];
+        const result = []; 
 
-        const tocItem = {
-            name,
-            anchor,
-            level,
-            children: []
-        };
-
-        if (isHtml) {
-            // Add ID to the header tag in the HTML content
-            content = content.replace(fullMatch, `<${tag} id="${anchor}">${text}</${tag}>`);
+        /**
+         * create TOC object
+         * @param {*} item 
+         * @returns 
+         */
+        function createTOCItem(item){
+            return {
+                name : item.content,
+                anchor : item.slug,
+                level : item.lvl,
+                children : []
+            }
         }
 
-        if (level === 1) {
-            toc.push(tocItem); // Add top-level headers directly to toc
-        } else {
-            let parent = toc[toc.length - 1];
-            for (let i = 2; i < level; i++) {
-                parent = parent.children[parent.children.length - 1]; // Traverse to the correct parent
+        function handleItem(item){
+
+            const top = stack[stack.length - 1];
+            if(!top){
+                stack.push(item);
+            } else if(item.level > top.level){
+                top.children.push(item);
+                stack.push(item);
+            } else {
+                stack.pop();
+                handleItem(item);
             }
-            parent.children.push(tocItem); // Add as a child to the appropriate parent
+        }
+
+        let min = 6; 
+        for(const i of flatArr){
+            if(i.lvl < min){
+                min = i.lvl;
+            }
+        }
+
+        for(const item of flatArr){
+            const tocItem = createTOCItem(item);
+            if(tocItem.level === min){
+                result.push(tocItem);
+            }
+            handleItem(tocItem);
+        }
+
+        return result;
+    }
+
+
+    info.toc = transfer(result);
+
+    delete info.markdownContent;
+
+    for(const i of result){
+        switch(i.lvl){
+            case 1:{
+                var newStr = `<h1 id="${i.slug}">`;
+                info.htmlContent = info.htmlContent.replace('<h1>',newStr);
+                break;
+            }
+            case 2:{
+                var newStr = `<h2 id="${i.slug}">`;
+                info.htmlContent = info.htmlContent.replace('<h2>',newStr);
+                break;
+            }
+            case 3:{
+                var newStr = `<h3 id="${i.slug}">`;
+                info.htmlContent = info.htmlContent.replace('<h3>',newStr);
+                break;
+            }
+            case 4:{
+                var newStr = `<h4 id="${i.slug}">`;
+                info.htmlContent = info.htmlContent.replace('<h4>',newStr);
+                break;
+            }
+            case 5:{
+                var newStr = `<h5 id="${i.slug}">`;
+                info.htmlContent = info.htmlContent.replace('<h5>',newStr);
+                break;
+            }
+            case 6:{
+                var newStr = `<h6 id="${i.slug}">`;
+                info.htmlContent = info.htmlContent.replace('<h6>',newStr);
+                break;
+            }
         }
     }
 
-    return isHtml ? content : toc; // Return updated HTML or toc JSON
+    return info;
 }
 
 module.exports = {

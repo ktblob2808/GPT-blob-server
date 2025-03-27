@@ -14,11 +14,10 @@ validate.validators.categoryIdIsExist = async function(value){
 }
 
 const addBlog = async (blogData) => {
-    const { categoryId, markdownContent, htmlContent } = blogData;
-    // Handle toc and htmlContent
-    const toc = handleToc(markdownContent);
-    blogData.toc = JSON.stringify(toc); // Convert toc to JSON string
-    blogData.htmlContent = handleToc(htmlContent, true); // Update HTML content with IDs
+    const { categoryId } = blogData;
+    blogData = handleToc(blogData);
+    blogData.toc = JSON.stringify(blogData.toc);
+
     const category = await blogTypeDao.getBlogTypeById(categoryId);
     if (!category) {
         throw new ValidationError('Invalid categoryId');
@@ -95,11 +94,8 @@ async function getBlogById(id, auth) {
 
 // Edit blog
 async function editBlogById(id, blogData) {
-    const { markdownContent, htmlContent } = blogData;
-    // Handle toc and htmlContent
-    const toc = handleToc(markdownContent);
-    blogData.toc = JSON.stringify(toc); // Convert toc to JSON string
-    blogData.htmlContent = handleToc(htmlContent, true); // Update HTML content with IDs
+    blogData = handleToc(blogData);
+    blogData.toc = JSON.stringify(blogData.toc);
     const updatedBlog = await blogDao.updateById(id, blogData);
     if (!updatedBlog) {
         throw new ServiceError('Blog not found or update failed');
