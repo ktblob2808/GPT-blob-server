@@ -3,7 +3,7 @@ const blogDao = require('../dao/blogDao');
 const blogTypeDao = require('../dao/blogTypeDao');
 const blogTypeModel = require("../dao/models/blogTypeModel");
 const { ValidationError, ServiceError } = require("../utils/ServiceError");
-
+const { handleToc } = require('../utils/tool'); // Import handleToc function
 
 validate.validators.categoryIdIsExist = async function(value){
     const blogTypeInfo = blogTypeModel.findByPk(value);
@@ -13,10 +13,11 @@ validate.validators.categoryIdIsExist = async function(value){
     return "CategoryId Is Not Exist";
 }
 
-
 const addBlog = async (blogData) => {
     const { categoryId } = blogData;
-    blogData.toc = JSON.stringify('[]');
+    blogData = handleToc(blogData);
+    blogData.toc = JSON.stringify(blogData.toc);
+
     const category = await blogTypeDao.getBlogTypeById(categoryId);
     if (!category) {
         throw new ValidationError('Invalid categoryId');
@@ -93,7 +94,8 @@ async function getBlogById(id, auth) {
 
 // Edit blog
 async function editBlogById(id, blogData) {
-    blogData.toc = JSON.stringify('[]');
+    blogData = handleToc(blogData);
+    blogData.toc = JSON.stringify(blogData.toc);
     const updatedBlog = await blogDao.updateById(id, blogData);
     if (!updatedBlog) {
         throw new ServiceError('Blog not found or update failed');
