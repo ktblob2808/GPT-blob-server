@@ -5,6 +5,7 @@ const md5 = require('md5');
 const blogTypeModel = require('./models/blogTypeModel');
 const blogModel = require('./models/blogModel');
 const Demo = require('./models/demoModel');
+const settingModel = require('./models/settingModel');
 
 sequelize.sync({ alter: true }).then(async () => {
     console.log('Database & tables created!');
@@ -83,5 +84,24 @@ sequelize.sync({ alter: true }).then(async () => {
             }
           ]);
          console.log("init demo data finished...");
+     }
+
+     // Create initial data for the Setting table
+     const settingCount = await settingModel.count();
+     if (!settingCount) {
+         await settingModel.create({
+             avatar: '/static/images/avatar.jpg',
+             siteTitle: 'My Blog',
+             github: 'https://github.com/my-profile',
+             qq: '12345678',
+             qqQrCode: '/static/images/qq_qr.jpg',
+             weixin: 'my_weixin',
+             weixinQrCode: '/static/images/weixin_qr.jpg',
+             mail: 'myemail@example.com',
+             icp: 'ICP 12345678',
+             githubName: 'my-github',
+             favicon: '/static/images/favicon.ico'
+         });
+         console.log("init setting data finished...");
      }
 });
