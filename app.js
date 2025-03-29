@@ -23,6 +23,7 @@ var bannerRouter = require('./routes/bannerRoute');
 var uploadRouter = require('./routes/uploadRoute');
 var blogTypeRouter = require('./routes/blogType');
 var blogRouter = require('./routes/blog'); // Add blog route
+var demoRouter = require('./routes/demo');
 
 var app = express();
 
@@ -63,6 +64,7 @@ app.use('/api', bannerRouter);
 app.use('/api', uploadRouter);
 app.use('/api', blogTypeRouter);
 app.use('/api', blogRouter); // Use blog route
+app.use('/api', demoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

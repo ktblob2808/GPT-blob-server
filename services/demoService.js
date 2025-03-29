@@ -17,6 +17,7 @@ const getAllDemos = async () => {
 };
 
 const updateDemoById = async (id, data) => {
+  data.description = JSON.stringify(data.description)
   return await demoDao.updateDemoById(id, data);
 };
 
