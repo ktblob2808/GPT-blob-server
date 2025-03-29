@@ -39,7 +39,7 @@ const Message = sequelize.define('Message', {
   timestamps: false
 });
 
-Blog.hasMany(Message, { foreignKey: 'blogId' });
-Message.belongsTo(Blog, { foreignKey: 'blogId' });
+Blog.hasMany(Message, { foreignKey: 'blogId', target: 'id' });
+Message.belongsTo(Blog, { foreignKey: 'blogId', target: 'id', as: "blog"  });
 
 module.exports = Message;
