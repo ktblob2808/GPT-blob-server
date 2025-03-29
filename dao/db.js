@@ -94,13 +94,13 @@ sequelize.sync({ alter: true }).then(async () => {
              siteTitle: 'My Blog',
              github: 'https://github.com/my-profile',
              qq: '12345678',
-             qqQrCode: '/static/images/qq_qr.jpg',
+             qqQrCode: '/static/images/qrcode.jpg',
              weixin: 'my_weixin',
-             weixinQrCode: '/static/images/weixin_qr.jpg',
+             weixinQrCode: '/static/images/qrcode.jpg',
              mail: 'myemail@example.com',
              icp: 'ICP 12345678',
              githubName: 'my-github',
-             favicon: '/static/images/favicon.ico'
+             favicon: '/static/images/favicon.png'
          });
          console.log("init setting data finished...");
      }
