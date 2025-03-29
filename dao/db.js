@@ -4,7 +4,7 @@ const bannerModel = require("./models/bannerModel");
 const md5 = require('md5');
 const blogTypeModel = require('./models/blogTypeModel');
 const blogModel = require('./models/blogModel');
-
+const Demo = require('./models/demoModel');
 
 sequelize.sync({ alter: true }).then(async () => {
     console.log('Database & tables created!');
@@ -61,4 +61,27 @@ sequelize.sync({ alter: true }).then(async () => {
          console.log("init blogtype data finished...");
      }
 
+     // Create initial data for the Demo table
+     const demoCount = await Demo.count();
+     if (!demoCount) {
+         await Demo.bulkCreate([
+            {
+              name: 'Project A',
+              url: 'https://project-a.com',
+              github: 'https://github.com/project-a',
+              description: JSON.stringify(['vue', 'nodejs', 'html', 'css']),
+              thumb: 'https://project-a.com/thumb.jpg',
+              order: 1
+            },
+            {
+              name: 'Project B',
+              url: 'https://project-b.com',
+              github: 'https://github.com/project-b',
+              description: JSON.stringify(['react', 'express', 'typescript']),
+              thumb: 'https://project-b.com/thumb.jpg',
+              order: 2
+            }
+          ]);
+         console.log("init demo data finished...");
+     }
 });
