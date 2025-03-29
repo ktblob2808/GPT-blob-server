@@ -24,6 +24,7 @@ var uploadRouter = require('./routes/uploadRoute');
 var blogTypeRouter = require('./routes/blogType');
 var blogRouter = require('./routes/blog'); // Add blog route
 var demoRouter = require('./routes/demo');
+var messageRouter = require('./routes/message');
 
 var app = express();
 
@@ -53,8 +54,9 @@ app.use(expressJWT({
     {"url" : "/api/banner", methods : ["GET"]},
     {"url" : "/api/blogtype", methods : ["GET"]},
     {"url" : "/api/blog", methods : ["GET"]},
-    {"url" : /\/api\/blog\/\d/, methods : ["GET"]}// Exclude from token checking
-
+    {"url" : /\/api\/blog\/\d/, methods : ["GET"]}, // Exclude from token checking
+    { "url": "/api/message", methods: ["GET", "POST"] },
+    { "url": "/api/comment", methods: ["GET", "POST"] }
   ]
 }))
 
@@ -65,6 +67,7 @@ app.use('/api', uploadRouter);
 app.use('/api', blogTypeRouter);
 app.use('/api', blogRouter); // Use blog route
 app.use('/api', demoRouter);
+app.use('/api', messageRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
