@@ -6,8 +6,8 @@ const { formatResponse } = require('../utils/tool');
 // Get about
 router.get('/about', async (req, res) => {
   try {
-    const about = await aboutService.getAbout();
-    res.json(formatResponse(0, '', about));
+    const { url } = await aboutService.getAbout();
+    res.json(formatResponse(0, '', url));
   } catch (error) {
     res.status(500).json(formatResponse(1, '', error.message));
   }

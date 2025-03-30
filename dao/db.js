@@ -6,6 +6,7 @@ const blogTypeModel = require('./models/blogTypeModel');
 const blogModel = require('./models/blogModel');
 const Demo = require('./models/demoModel');
 const settingModel = require('./models/settingModel');
+const aboutModel = require('./models/aboutModel');
 
 sequelize.sync({ alter: true }).then(async () => {
     console.log('Database & tables created!');
@@ -106,9 +107,9 @@ sequelize.sync({ alter: true }).then(async () => {
      }
 
      // Create initial data for the About table
-     const aboutCount = await blogTypeModel.count();
+     const aboutCount = await aboutModel.count();
      if (!aboutCount) {
-         await blogTypeModel.create({
+         await aboutModel.create({
              url: 'https://example.com/about'
          });
          console.log("init about data finished...");

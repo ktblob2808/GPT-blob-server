@@ -9,7 +9,7 @@ const updateAbout = async (url) => {
   if (about) {
     about.url = url;
     await about.save();
-    return about;
+    return url;
   }
   throw new Error('About record not found');
 };
