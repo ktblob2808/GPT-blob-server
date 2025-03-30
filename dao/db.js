@@ -104,4 +104,13 @@ sequelize.sync({ alter: true }).then(async () => {
          });
          console.log("init setting data finished...");
      }
+
+     // Create initial data for the About table
+     const aboutCount = await blogTypeModel.count();
+     if (!aboutCount) {
+         await blogTypeModel.create({
+             url: 'https://example.com/about'
+         });
+         console.log("init about data finished...");
+     }
 });
