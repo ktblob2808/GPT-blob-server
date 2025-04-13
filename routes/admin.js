@@ -11,8 +11,11 @@ const { validateCaptcha } = require('../services/captchaService');
 router.post('/login', async (req, res, next) => {
     try {
         const { captcha } = req.body;
-       // validateCaptcha(captcha, req.session.captcha);
-
+        // First, there should be a captcha verification
+        // if(captcha.toLowerCase() !== req.session.captcha.toLowerCase()){
+        //     // If entering this if, it means there is a problem, the user input captcha is incorrect
+        //     throw new ValidationError("Captcha error");
+        // }
         const { token, data } = await loginService(req.body);
         if(token){
             res.setHeader('authentication', token);

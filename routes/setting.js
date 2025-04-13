@@ -9,7 +9,7 @@ router.get('/setting', async (req, res) => {
     const setting = await settingService.getSetting();
     res.json(formatResponse(0, '', setting));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -19,7 +19,7 @@ router.put('/setting', async (req, res) => {
     const updatedSetting = await settingService.updateSetting(req.body);
     res.json(formatResponse(0, '', updatedSetting));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 

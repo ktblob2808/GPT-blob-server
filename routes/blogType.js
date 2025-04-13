@@ -20,7 +20,7 @@ router.get('/blogtype/:id', async (req, res) => {
     const blogType = await blogTypeService.getBlogTypeById(req.params.id);
     res.json(formatResponse(0, '' , blogType));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -30,7 +30,7 @@ router.get('/blogtype', async (req, res) => {
     const blogTypes = await blogTypeService.getAllBlogTypes();
     res.json(formatResponse(0,"", blogTypes));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -40,7 +40,7 @@ router.put('/blogtype/:id', async (req, res) => {
     const blogType = await blogTypeService.updateBlogTypeById(req.params.id, req.body);
     res.json(formatResponse(0, '', blogType));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -50,7 +50,7 @@ router.delete('/blogtype/:id', async (req, res) => {
     const articleCount = await blogTypeService.deleteBlogTypeById(req.params.id);
     res.json(formatResponse(0, '',  articleCount));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 

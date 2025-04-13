@@ -9,7 +9,7 @@ router.get('/about', async (req, res) => {
     const { url } = await aboutService.getAbout();
     res.json(formatResponse(0, '', url));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -20,7 +20,7 @@ router.post('/about', async (req, res) => {
     const updatedAbout = await aboutService.updateAbout(url);
     res.json(formatResponse(0, '', updatedAbout));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 

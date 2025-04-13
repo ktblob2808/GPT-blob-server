@@ -9,7 +9,7 @@ router.post('/blog', async (req, res) => {
     const blog = await blogService.addBlog(req.body);
     res.json(formatResponse(0, '', blog));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -20,7 +20,7 @@ router.get('/blog', async (req, res) => {
     const blogs = await blogService.getAllBlogs(parseInt(page), parseInt(limit), parseInt(categoryId));
     res.json(formatResponse(0, '', blogs));
   } catch (error) {
-    res.status(500).json(formatResponse(1,'', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -30,7 +30,7 @@ router.get('/blog/:id', async (req, res, next) => {
     const blog = await blogService.getBlogById(req.params.id, req.headers.authorization);
     res.json(formatResponse(0, '',blog));
   } catch (error) {
-    res.json(formatResponse(1, '',error.message));
+    res.json(formatResponse(1, error.message));
   }
 });
 
@@ -40,7 +40,7 @@ router.put('/blog/:id', async (req, res, next) => {
     const updatedBlog = await blogService.editBlogById(req.params.id, req.body);
     res.json(formatResponse(0, '', updatedBlog));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -50,7 +50,7 @@ router.delete('/blog/:id', async (req, res, next) => {
     const result = await blogService.deleteBlogById(req.params.id);
     res.json(formatResponse(0, "", true));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 

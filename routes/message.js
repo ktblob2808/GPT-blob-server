@@ -21,7 +21,7 @@ router.get('/comment', async (req, res) => {
     const result = await messageService.getMessages(blogId, offset, limit);
     res.json(formatResponse(0, '', result));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -32,7 +32,7 @@ router.post('/message', async (req, res) => {
     const result = await messageService.addMessage(data);
     res.json(formatResponse(0, '', result));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -43,7 +43,7 @@ router.post('/comment', async (req, res) => {
     const result = await messageService.addMessage(data);
     res.json(formatResponse(0, '', result));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -53,7 +53,7 @@ router.delete('/message/:id', async (req, res) => {
     const result = await messageService.deleteMessage(req.params.id);
     res.json(formatResponse(0, '', true));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -63,7 +63,7 @@ router.delete('/comment/:id', async (req, res) => {
     const result = await messageService.deleteMessage(req.params.id);
     res.json(formatResponse(0, '', true));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
