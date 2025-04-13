@@ -9,7 +9,7 @@ router.post('/project', async (req, res) => {
     const demo = await demoService.addDemo(req.body);
     res.json(formatResponse(0, '', demo));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -19,7 +19,7 @@ router.get('/project', async (req, res) => {
     const demos = await demoService.getAllDemos();
     res.json(formatResponse(0, '', demos));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -29,7 +29,7 @@ router.put('/project/:id', async (req, res) => {
     const demo = await demoService.updateDemoById(req.params.id, req.body);
     res.json(formatResponse(0, '', demo));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
@@ -39,7 +39,7 @@ router.delete('/project/:id', async (req, res) => {
     const order = await demoService.deleteDemoById(req.params.id);
     res.json(formatResponse(0, '', true));
   } catch (error) {
-    res.status(500).json(formatResponse(1, '', error.message));
+    res.status(500).json(formatResponse(1, error.message));
   }
 });
 
